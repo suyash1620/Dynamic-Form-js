@@ -1,0 +1,92 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+  
+    background-image: url('background.webp');
+  }
+  
+  h1{
+    color: white;
+  }
+  select{
+    width: 38%!important;
+    font-weight: 600!important;
+  }
+  option{
+    font-weight: 600!important;
+  }
+  option:focus{
+    background-color: blueviolet!important;
+  }
+  .add-toForm{
+    width: 30%!important;
+    height: 40px;
+    border-radius: 25px;
+    border: none;
+    margin-left: 10px;
+    background-color: blueviolet;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  form{
+    width: 100%;
+    background-color: white;
+  }
+  input:focus{
+   border:1px solid lightblue;
+  }
+  input{
+    width: 100%;
+  }
+  span{
+    font-size: 25px;
+    font-weight: 600;
+  }
+  label{
+    padding-left: 50px;
+    font-size: 25px;
+    font-weight: 600;
+  }
+  #submitted{
+    width: 15%;
+    margin-left: 45%;
+    border: none;
+    background-color: blue;
+    border-radius: 12px;
+    padding: 8px 12px;
+    color: white;
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 45px;
+  }
+  #submitted:focus{
+    transform: translateY(4px);
+    transition-duration: 0.8s;
+  }
+  .add {
+    height: 35px;
+    border:none;
+    background-color: rgb(195, 81, 195);
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 8px;
+  }
+  .radio-btn,.checkbox-btn{
+    display: flex;
+    align-items: center;
+  }
+  input[type="radio"],input[type="checkbox"]{
+    width: 20%;
+  }
+  i{
+    font-size: 28px!important;
+    padding-left: 10px;
+    cursor: pointer;
+  }
+  
+ 

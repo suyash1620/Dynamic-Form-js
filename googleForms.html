@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Forms</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="googleform.css">
+    <style>
+        #form{
+            width: 60%!important;
+            margin: auto;
+            margin-top: 30px;
+        }
+        select{
+            width: 60%!important;
+            margin-left: 15px;
+        }
+        #form-row{
+            width: 60%!important;
+            margin-top: 10%;
+            background-color: white;
+            margin: auto;
+            margin-bottom: 5%;
+            display: none;
+        }
+        #form-details{
+            height: 60%!important;
+            height: 100%;
+            margin: auto;
+            background-color: white;
+            padding: 0 40px;
+            padding-bottom: 5%;
+        }
+        #form-details .row{
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        h1{
+            text-align: center;
+        }
+        .checkvalue{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checklabel{
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .radio-label,.input-label,.checkBox-label,.select-label{
+            padding-left: 50px!important;
+            font-size: 25px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+        .radio-value,.input-value,.select-value{
+            font-size: 18px;
+            font-weight: 400;
+            font-family: 'Open Sans', sans-serif;
+        }
+        @media screen and (min-width:0) and (max-width:768px){
+            #form,#form-row,#form-details{
+                width: 100%;
+            }
+            
+        }
+    </style>
+</head>
+<body>
+    <header>
+
+    </header>
+
+    <main id="main">
+        <div class="container container1 mt-5 mb-5">
+            <h1>Dynamic Forms</h1>
+            <form id="form">
+            </form>
+            <div class="mt-5" id="form-row">
+                <svg viewBox="0 0 500 100">
+                    <path d="M 0 00 C 150 150 300 0 500 80 L 500 0 L 0 0" fill="#6C0BA9"></path>
+                    <path d="M 0 00 C 150 150 330 -30 500 50 L 500 0 L 0 0" fill="#D7A1F9" opacity="0.8"></path>
+                    <path d="M 0 00 C 215 150 250 0 500 100 L 500 0 L 0 0" fill="#A020F0" opacity="0.5"></path>
+                </svg>
+                <div class="row" id="form-details">
+
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        let labelsInput = [];
+        let labelsInputText = [];
+        let labelSelect = [];
+        let labelTypeCheckBox = [];
+        let labelTypeRadio = [];
+        document.getElementById("form").innerHTML= sessionStorage.getItem("formData");
+        let icon = document.getElementsByTagName("i");
+        let inputs = document.getElementsByTagName("input");
+       
+        for(let j of icon){
+            j.style.display="none";
+        }
+        for(let k of document.getElementById("form").elements){
+            if(k.tagName == "INPUT" && k.getAttribute("type")!="button" && k.getAttribute("type")!="radio" && k.getAttribute("type")!="checkbox"){
+               if(k.parentNode.parentNode.children[0].children[0].tagName == "LABEL"){
+                labelsInput.push(k.parentNode.parentNode.children[0].children[0].getAttribute("for"));
+               }
+    
+            }
+            else if(k.tagName == "SELECT" && k.getAttribute("type")!="button" && k.getAttribute("type")!="radio" && k.getAttribute("type")!="checkbox"){
+                labelSelect.push(k.parentNode.parentNode.parentNode.children[0].firstChild.getAttribute("for"));
+            }
+            else if(k.getAttribute("type")!="button" && k.getAttribute("type")!="checkbox"){
+                if(!labelsInput.includes(k.parentNode.parentNode.parentNode.parentNode.firstChild.firstChild.getAttribute("for"))){
+                   labelTypeRadio.push(k.parentNode.parentNode.parentNode.parentNode.firstChild.firstChild.getAttribute("for"));
+                }
+            }
+            else if(k.getAttribute("type")!="button"){
+                if(!labelsInput.includes(k.parentNode.parentNode.parentNode.parentNode.firstChild.firstChild.getAttribute("for"))){
+                   labelTypeCheckBox.push(k.parentNode.parentNode.parentNode.parentNode.firstChild.firstChild.getAttribute("for"));
+                }
+            }
+            else{
+                k.setAttribute("onclick","validation()");
+            }
+           
+        }
+        labelTypeRadio = [...new Set(labelTypeRadio)];
+        labelTypeCheckBox = [...new Set(labelTypeCheckBox)];
+        for(let m of inputs){
+            if(m.getAttribute("type") == "text"){
+                m.removeAttribute("disabled");
+                m.setAttribute("pattern","^[a-zA-Z_ ]*$");
+                m.setAttribute("title","Only Contains Words");
+                
+            }
+            else if(m.getAttribute("type") == "email"){
+                m.removeAttribute("disabled");
+            }
+            else{
+                continue;
+            }
+        }
+        for(let i of inputs){
+            if(i.getAttribute("type")=="checkbox"){
+                continue;
+            }
+            else if(i.getAttribute("type") == "number"){
+                i.setAttribute("type","text");
+                i.removeAttribute("disabled");
+                i.attributes["required"] = "required"; 
+            }
+            else{
+                i.attributes["required"] = "required"; 
+            }
+        }
+        document.getElementById("submitted").removeAttribute("disabled");
+        function validation(){
+            document.getElementById("submitted").setAttribute("disabled","true");
+            document.querySelector("#form-row").style.display="block";
+            let form = document.querySelector("#form-details");
+            let input = document.getElementsByTagName("input");
+            let select = document.getElementsByTagName("select");
+            let checkboxValues = [];
+            for(let a = 0; a < input.length ;a++){
+                if(input[a].getAttribute("type") != "checkbox" && input[a].getAttribute("type") != "button"){
+                    if(input[a].getAttribute("type") == "radio"){
+                        if(input[a].checked){
+                            for(let b of labelTypeRadio){
+                                b = b[0].toUpperCase() + b.substring(1,b.length);
+                                let radioRow = document.createElement("div");
+                                radioRow.setAttribute("class" ,"row inp-radio");
+                                form.appendChild(radioRow);
+                                let colRadioLabel = document.createElement("div");
+                                colRadioLabel.setAttribute("class","col-4 radio-label");
+                                colRadioLabel.innerHTML = b + " " +":-";
+                                radioRow.appendChild(colRadioLabel);
+                                let colRadioValue = document.createElement("div");
+                                colRadioValue.setAttribute("class","col-8 radio-value");
+                                colRadioValue.innerHTML = input[a].value;
+                                radioRow.appendChild(colRadioValue);
+                            }
+                            input[a].checked = false;
+                        }
+                    }
+                    else {
+                        let labelValue = input[a].getAttribute("id");
+                        labelValue = labelValue[0].toUpperCase() + labelValue.substring(1,labelValue.length);
+                        let inputRow = document.createElement("div");
+                        inputRow.setAttribute("class" ,"row inputs");
+                        form.appendChild(inputRow);
+                        let colInputLabel = document.createElement("div");
+                        colInputLabel.setAttribute("class","col-4 input-label");
+                        colInputLabel.innerHTML = labelValue + " " +":-";
+                        inputRow.appendChild(colInputLabel);
+                        let colInputValue = document.createElement("div");
+                        colInputValue.setAttribute("class","col-8 input-value");
+                        colInputValue.innerHTML = input[a].value;
+                        inputRow.appendChild(colInputValue);
+                        input[a].value = "";
+                    }
+                }
+                else if(input[a].getAttribute("type") != "button"){
+                    if(input[a].checked == true){
+                        checkboxValues.push(input[a].value);
+                        input[a].checked = false;
+                    }
+                }
+            }
+            let count = 0;
+            for(let check of labelTypeCheckBox){
+                check = check[0].toUpperCase() + check.substring(1,check.length);
+                let checkBoxRow = document.createElement("div");
+                checkBoxRow.setAttribute("class" ,"row checkbox-inp");
+                form.appendChild(checkBoxRow);
+                let colCheckLabel = document.createElement("div");
+                colCheckLabel.setAttribute("class","col-4 checkBox-label");
+                colCheckLabel.innerHTML = check + " " +":-";
+                checkBoxRow.appendChild(colCheckLabel);
+                let colCheckedValue = document.createElement("div");
+                colCheckedValue.setAttribute("class","col-8 checked-value");
+                checkBoxRow.appendChild(colCheckedValue);
+                
+                for(let checkValues of checkboxValues){
+                    count ++;
+                    let checkBoxRow1 = document.createElement("div");
+                    checkBoxRow1.setAttribute("class" ,"row mt-1");
+                    colCheckedValue.appendChild(checkBoxRow1);
+                    let colCheckLabel1 = document.createElement("div");
+                    colCheckLabel1.setAttribute("class","col-4 checklabel text-start");
+                    colCheckLabel1.innerHTML = check + " " + count +" " +":-";
+                    checkBoxRow1.appendChild(colCheckLabel1);
+                    let colCheckedValue1 = document.createElement("div");
+                    colCheckedValue1.setAttribute("class","col-8 checkvalue text-start");
+                    colCheckedValue1.innerHTML = checkValues.toLocaleUpperCase();
+                    checkBoxRow1.appendChild(colCheckedValue1);
+                }
+            }
+            for(let s = 0; s < select.length ; s++){
+                labelSelect[s] = labelSelect[s][0].toUpperCase() + labelSelect[s].substring(1,labelSelect[s].length);
+                let selectRow = document.createElement("div");
+                selectRow.setAttribute("class" ,"row select-feild");
+                form.appendChild(selectRow);
+                let colSelectLabel = document.createElement("div");
+                colSelectLabel.setAttribute("class","col-4 select-label");
+                colSelectLabel.innerHTML = labelSelect[s] + " " +":-";
+                selectRow.appendChild(colSelectLabel);
+                let colSelectValue = document.createElement("div");
+                colSelectValue.setAttribute("class","col-8 select-value");
+                colSelectValue.innerHTML = select[s].value.toUpperCase();
+                selectRow.appendChild(colSelectValue);
+                select[s].selectedIndex = 0;
+            }
+            
+        }
+    
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+
+</html>
